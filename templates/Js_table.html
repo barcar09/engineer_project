@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS_table</title>
+
+    <link rel="stylesheet" type="text/css" href={% static "menu_links.css" %}>
+</head>
+<body>
+
+
+        <div id="test">
+            {{ Person }}
+            {{ Person_2 }}
+            {% for obj in Person %}
+
+                    {% for obj_2 in obj.values %}
+                        <p>{{Person}}, </p>
+                    {% endfor %}
+
+            {% endfor %}
+
+        </div>
+
+
+        <p id="demo"> </p>
+
+
+
+
+
+
+        <div  id="table_nav">
+        <table >
+            <thead>
+            <tr id="table_th">
+                <th id="table_th"></th>
+                <th id="table_th">Nazwisko</th>
+                <th id="table_th">Numer telefonu</th>
+                <th id="table_th">Wiek</th>
+                <th id="table_th">imię rodzica</th>
+                <th id="table_th">Godzina</th>
+            </tr >
+            </thead>
+            <tr id="table_element">
+
+                    <td id="table_element">January</td>
+
+                <td id="table_element">$100</td>
+            </tr>
+            <tr>
+                <td id="table_element">February</td>
+                <td id="table_element">$50</td>
+            </tr>
+        </table>
+
+        </div>
+
+</body>
+</html>

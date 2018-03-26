@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Welcome by wheelnav.js">
+    <meta name="author" content="gabor.berkesi@softwaretailoring.net">
+    <link rel="shortcut icon" href="http://wheelnavjs.softwaretailoring.net/wheelnav_favicon.png">
+
+    <title>wheelnav.js - Welcome</title>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+
+    <![endif]-->
+    {% load static %}
+    { % load staticfiles % }
+
+
+    <link rel="stylesheet" type="text/css" href={% static "menu_links.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "bootstrap.css"%}>
+
+
+    <script type="text/javascript"   src={% static   "raphael.min.js"%} ></script>
+    <script type="text/javascript"  src={% static  "raphael.icons.min.js"%}></script>
+    <script type="text/javascript" src={%  static "jquery-3.2.1.min.js"%}></script>
+    <script type="text/javascript"  src={% static "wheelnav.js"%}></script>
+    <script type="text/javascript" src={%  static "list_of_links.js"%}></script>
+    <script type="text/javascript" src={% static "menu_script.js"%}></script>
+    <script type="text/javascript" src={% static "http_www.gstatic.com_charts_loader.js"%}></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['timeline']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        $.ajax('http://127.0.0.1:8000/times/')
+            .done(function (response) {
+                var list_of_lis=[];
+                for (id in response) {
+                    var Time = response[id];
+                    var gg=[Time.Time_days, Time.Group__group_name, new Date(0, 0, 0, Time.Time_hour, Time.Time_minutes, 0), new Date(0, 0, 0, Time.Time_hour +1 , Time.Time_minutes, 0)]
+
+                    list_of_lis.push(gg)
+                    }
+            var container = document.getElementById('timeline');
+            var chart = new google.visualization.Timeline(container);
+            var dataTable = new google.visualization.DataTable();
+            dataTable.addColumn({ type: 'string', id: 'Room' });
+            dataTable.addColumn({ type: 'string', id: 'Name' });
+            dataTable.addColumn({ type: 'date', id: 'Start' });
+            dataTable.addColumn({ type: 'date', id: 'End' });
+            dataTable.addRows(list_of_lis);
+
+
+
+    var options = {
+      timeline: { colorByRowLabel: true }
+    };
+
+    chart.draw(dataTable, options);
+
+            });
+
+
+      }
+
+    </script>
+</head>
+<body>
+
+
+
+    <header>
+        <p>
+            Welcome to belendoron app
+        </p>
+
+    </header>
+
+
+    <div style="display:none;" id="list_of_link">
+
+
+        {% for obj in list %}
+            <ul id="list-links" >
+                <li  id="circle-links"><a id="circle-links" href="{{ obj }}">{{ obj }}</a> </li>
+            </ul>
+
+        {% endfor %}
+
+    </div>
+
+    <div style="display:none;"  id="container" >
+    </div>
+    <div style="display:none;" id="finance">
+
+
+            {% for butt in But_trim %}
+                <button id="Nav_dis" value="{{ butt.Trimester_type}} " onclick= "show_finance( {{ butt.id}})"  class="btn btn-primary btn-large" >{{butt.Trimester_type}} </button>
+            {% endfor %}
+        <div   id="finance_container" >
+        </div>
+    </div>
+    <div   id="wheelDiv" >
+
+    </div>
+    <div style="display:none;" id="Nav_button">
+
+            {% for butt in Group %}
+                <button id="Nav_dis" value="{{ butt }} " onclick= "show_table('{{ butt }}')" class=" btn btn-primary btn-large" >{{ butt }} </button>
+            {% endfor %}
+
+
+
+	</div>
+
+        <div style="display:none;" id="Payment_container">
+
+            <table >
+            <thead>
+            <tr id="table_th">
+                <th id="table_th">Imię dziecka</th>
+                <th id="table_th">Nazwisko</th>
+                <th id="table_th"> w tym miesiącu</th>
+                <th id="table_th"> za książki </th>
+            </tr >
+            </thead>
+            {% for obj in Per_all %}
+
+                <tr>
+
+                    <td id="table_element">{{ obj.child_name }}</td>
+                    <td id="table_element">{{ obj.surname }}</td>
+                    <td id="table_element">
+
+                        {% if obj.Pay_in_this_month %}
+                            <img src={%  static "ic_done_black_24dp_1x.png" %}/>
+
+                        {% else %}
+                            <img src={%  static "ic_clear_black_24dp_1x.png" %}/>
+                        {% endif %}
+                    </td>
+                    <td id="table_element">
+                        {% if  obj.Pay_for_books %}
+                            <img src={%  static "ic_done_black_24dp_1x.png" %}/>
+                        {% else %}
+                            <img src={%  static "ic_clear_black_24dp_1x.png" %}/>
+                        {%  endif %}
+                    </td>
+
+
+                </tr>
+
+
+
+
+
+            {% endfor %}
+
+        </table>
+
+        </div>
+    <div  id="Time_line_table">
+        <div class="timetable">
+            <div id="timeline" style="  visibility: hidden;"></div>
+
+
+        </div>
+    </div>
+
+
+
+    <!-- Insert generated HTML5 code from here -> http://pmg.softwaretailoring.net -->
+
+    <footer>
+        <a class="btn btn-primary" href="/admin/">Administracja</a>
+        <p>&copy; 2017 by Bartlomiej Barcikowski</p>
+    </footer>
+</body>
+</html>
